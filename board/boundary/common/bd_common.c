@@ -17,6 +17,7 @@
 #include <asm/imx-common/sata.h>
 #include <i2c.h>
 #include <linux/fb.h>
+#include <version.h>
 #include "bd_common.h"
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -172,9 +173,16 @@ void common_board_init(const struct i2c_pads_info *p, int i2c_bus_cnt, int otg_i
 	        setup_i2c(p->bus_index, CONFIG_SYS_I2C_SPEED, 0x7f, p);
 		p += I2C_PADS_INFO_ENTRY_SPACING;
 	}
+#ifdef CONFIG_FAN53526
+	fan53526_init();
+#endif
 #ifdef CONFIG_MAX77823
 	max77823_init();
 #endif
+#ifdef CONFIG_TAMPER
+	check_tamper();
+#endif
+
 #ifdef CONFIG_CMD_SATA
 	if (!gp_hd_detect || gpio_get_value(gp_hd_detect))
 		setup_sata();
@@ -271,6 +279,22 @@ static void addmac_env(const char* env_var)
 }
 #endif
 
+#if defined(CONFIG_CMD_FASTBOOT) || defined(CONFIG_CMD_DFU)
+static void addserial_env(const char* env_var)
+{
+	unsigned char mac_address[8];
+	char serialbuf[20];
+
+	if (!getenv(env_var)) {
+		imx_get_mac_from_fuse(0, mac_address);
+		snprintf(serialbuf, sizeof(serialbuf), "%02x%02x%02x%02x%02x%02x",
+			 mac_address[0], mac_address[1], mac_address[2],
+			 mac_address[3], mac_address[4], mac_address[5]);
+		setenv(env_var, serialbuf);
+	}
+}
+#endif
+
 #ifndef CONFIG_SYS_BOARD
 /* CANNOT be in BSS section, will clobber relocation table */
 const char *board_type = (void*)1;
@@ -289,8 +313,12 @@ int checkboard(void)
 	return 0;
 }
 
+static const char str_uboot_release[] = "uboot_release";
+static const char cur_uboot_release[] = PLAIN_VERSION;
+
 int board_late_init(void)
 {
+	char *uboot_release;
 	int cpurev = get_cpu_rev();
 
 #ifdef CONFIG_BOARD_LATE_SPECIFIC_INIT
@@ -313,7 +341,20 @@ int board_late_init(void)
 #ifdef CONFIG_ENV_BD_ADDR
 	addmac_env("bd_addr");
 #endif
+#if defined(CONFIG_CMD_FASTBOOT) || defined(CONFIG_CMD_DFU)
+	addserial_env("serial#");
+#endif
 	print_time_rv4162();
 
+	uboot_release = getenv(str_uboot_release);
+	if (!uboot_release || strcmp(cur_uboot_release, uboot_release)) {
+		setenv(str_uboot_release, cur_uboot_release);
+		if (uboot_release) {
+			/*
+			 * if already saved in environment, correct value
+			 */
+			saveenv();
+		}
+	}
 return 0;
 }

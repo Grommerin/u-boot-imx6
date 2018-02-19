@@ -253,8 +253,8 @@ static const iomux_v3_cfg_t init_pads[] = {
 	IOMUX_PAD_CTRL(EIM_D31__UART3_RTS_B, UART_PAD_CTRL),
 
 	/* UART4  */
-	IOMUX_PAD_CTRL(KEY_ROW0__UART4_TX_DATA, UART_PAD_CTRL),
-	IOMUX_PAD_CTRL(KEY_COL0__UART4_RX_DATA, UART_PAD_CTRL),
+	IOMUX_PAD_CTRL(KEY_COL0__UART4_TX_DATA, UART_PAD_CTRL),
+	IOMUX_PAD_CTRL(KEY_ROW0__UART4_RX_DATA, UART_PAD_CTRL),
 
 	/* USBH1 */
 	IOMUX_PAD_CTRL(EIM_D30__USB_H1_OC, WEAK_PULLUP),
@@ -326,6 +326,13 @@ static const struct i2c_pads_info i2c_pads[] = {
 };
 #define I2C_BUS_CNT	3
 
+int power_init_board(void)
+{
+	mdelay(3);
+	SETUP_IOMUX_PADS(sd3_usdhc3_pads);
+	return 0;
+}
+
 #ifdef CONFIG_USB_EHCI_MX6
 int board_ehci_hcd_init(int port)
 {
@@ -361,14 +368,17 @@ void board_enable_lvds(const struct display_info_t *di, int enable)
 {
 	gpio_set_value(GP_8BIT_LVDS,
 			(di->pixfmt == IPU_PIX_FMT_RGB666) ? 1 : 0);
-	gpio_set_value(GP_BACKLIGHT_LVDS, enable ^ 1);
+	gpio_set_value(GP_BACKLIGHT_LVDS, enable ^
+			((di->fbflags & FBF_BKLIT_LOW_ACTIVE) ? 1 : 0));
 	gpio_set_value(GP_BACKLIGHT_LVDS_EN, enable);
 }
 
 static const struct display_info_t displays[] = {
 	/* lvds */
-	VD_WVGA_TX23D200_18(LVDS, NULL, 0, 0x00),
-	VD_WVGA_TX23D200_24(LVDS, NULL, 0, 0x00),
+	VD_WVGA_TX23D200_18L(LVDS, NULL, 0, 0x00),
+	VD_WVGA_TX23D200_18H(LVDS, NULL, 0, 0x00),
+	VD_WVGA_TX23D200_24L(LVDS, NULL, 0, 0x00),
+	VD_WVGA_TX23D200_24H(LVDS, NULL, 0, 0x00),
 
 	/* hdmi */
 	VD_1280_720M_60(HDMI, fbp_detect_i2c, 1, 0x50),
@@ -465,8 +475,6 @@ int board_early_init_f(void)
 	set_gpios(gpios_out_low, ARRAY_SIZE(gpios_out_low), 0);
 	SETUP_IOMUX_PADS(sd3_gpio_pads);
 	SETUP_IOMUX_PADS(init_pads);
-	mdelay(3);
-	SETUP_IOMUX_PADS(sd3_usdhc3_pads);
 	return 0;
 }
 

@@ -94,7 +94,9 @@
 #ifndef CONFIG_SF_DEFAULT_CS
 #define CONFIG_SF_DEFAULT_CS   0
 #endif
+#ifndef CONFIG_SF_DEFAULT_SPEED
 #define CONFIG_SF_DEFAULT_SPEED 25000000
+#endif
 #define CONFIG_SF_DEFAULT_MODE (SPI_MODE_0)
 #endif
 
@@ -246,6 +248,10 @@
 #endif
 #endif
 
+#ifndef BD_CONSOLE_STR
+#define BD_CONSOLE_STR	"console=" BD_CONSOLE "\0"
+#endif
+
 #if defined(CONFIG_VIDEO) && !defined(BD_NOVIDEO_CONSOLE)
 #define BD_STDOUT_SERIAL	"setenv stdout serial;"
 #define BD_STDOUT_VIDEO		"setenv stdout serial,vga; "
@@ -366,12 +372,16 @@
 #define LOG_CMA_STR ""
 #endif
 
+#ifndef CONFIG_ENV_OFFSET
+#define CONFIG_ENV_OFFSET		0xc0000
+#endif
+
 #define BD_BOUNDARY_ENV_SETTINGS \
 	"clearenv=if sf probe || sf probe ; then " \
-		"sf erase 0xc0000 0x2000 && " \
+		"sf erase " __stringify(CONFIG_ENV_OFFSET) " 0x2000 && " \
 		"echo restored environment to factory default ; fi\0" \
 	LOG_CMA_STR \
-	"console=" BD_CONSOLE "\0" \
+	BD_CONSOLE_STR \
 	"dfu_alt_info=u-boot raw 0x0 0xc0000\0" \
 	"fdt_addr=" BD_RAM_FDT "\0" \
 	"fdt_high=0xffffffff\0" \
@@ -444,10 +454,10 @@
 #endif
 
 #if defined(CONFIG_ENV_IS_IN_MMC)
+#undef CONFIG_ENV_OFFSET
 #define CONFIG_ENV_OFFSET		(6 * 64 * 1024)
 #define CONFIG_SYS_MMC_ENV_DEV		0
 #elif defined(CONFIG_ENV_IS_IN_SPI_FLASH)
-#define CONFIG_ENV_OFFSET		(768 * 1024)
 #define CONFIG_ENV_SECT_SIZE		(8 * 1024)
 #define CONFIG_ENV_SPI_BUS		CONFIG_SF_DEFAULT_BUS
 #define CONFIG_ENV_SPI_CS		CONFIG_SF_DEFAULT_CS

@@ -87,7 +87,7 @@ static const iomux_v3_cfg_t init_pads[] = {
 	IOMUX_PAD_CTRL(CSI0_DAT10__ECSPI2_MISO, SPI_PAD_CTRL),
 	IOMUX_PAD_CTRL(CSI0_DAT9__ECSPI2_MOSI, SPI_PAD_CTRL),
 	IOMUX_PAD_CTRL(CSI0_DAT8__ECSPI2_SCLK, SPI_PAD_CTRL),
-#define GP_ECSPI2_CS		IMX_GPIO_NR(3, 19)
+#define GP_ECSPI2_CS		IMX_GPIO_NR(5, 29)
 	IOMUX_PAD_CTRL(CSI0_DAT11__GPIO5_IO29, SPI_PAD_CTRL),
 
 #define GP_GPIOKEY_POWER	IMX_GPIO_NR(3, 1)
@@ -109,16 +109,20 @@ static const iomux_v3_cfg_t init_pads[] = {
 	IOMUX_PAD_CTRL(DISP0_DAT1__GPIO4_IO22, WEAK_PULLUP),
 #define GP_MODEM_RESET		IMX_GPIO_NR(4, 23)
 	IOMUX_PAD_CTRL(DISP0_DAT2__GPIO4_IO23, WEAK_PULLUP),
-#define GP_STAT_LED2		IMX_GPIO_NR(4, 25)
-	IOMUX_PAD_CTRL(DISP0_DAT4__GPIO4_IO25, WEAK_PULLUP),
-#define GP_STAT_LED1		IMX_GPIO_NR(4, 26)
-	IOMUX_PAD_CTRL(DISP0_DAT5__GPIO4_IO26, WEAK_PULLUP),
-#define GP_STAT_LED3		IMX_GPIO_NR(4, 27)
-	IOMUX_PAD_CTRL(DISP0_DAT6__GPIO4_IO27, WEAK_PULLUP),
+#define GP_STAT_LED1		IMX_GPIO_NR(4, 26)	/* Blue */
+	IOMUX_PAD_CTRL(DISP0_DAT5__GPIO4_IO26, WEAK_PULLDN),
+#define GP_STAT_LED2		IMX_GPIO_NR(4, 25)	/* Green */
+	IOMUX_PAD_CTRL(DISP0_DAT4__GPIO4_IO25, WEAK_PULLDN),
+#define GP_STAT_LED2_CTRL	IMX_GPIO_NR(3, 7)
+	IOMUX_PAD_CTRL(EIM_DA7__GPIO3_IO07, OUTPUT_40OHM),
+#define GP_STAT_LED3		IMX_GPIO_NR(4, 27)	/* Red */
+	IOMUX_PAD_CTRL(DISP0_DAT6__GPIO4_IO27, WEAK_PULLDN),
+#define GP_STAT_LED3_CTRL	IMX_GPIO_NR(2, 30)
+	IOMUX_PAD_CTRL(EIM_EB2__GPIO2_IO30, OUTPUT_40OHM),
 #define GP_MODEM_ON_OFF		IMX_GPIO_NR(4, 29)
 	IOMUX_PAD_CTRL(DISP0_DAT8__GPIO4_IO29, WEAK_PULLUP),
 	/* SIM */
-#define GP_SIM_DETECT		IMX_GPIO_NR(2, 18)
+#define GP_SIM_DETECT		IMX_GPIO_NR(2, 19)
 	IOMUX_PAD_CTRL(EIM_A19__GPIO2_IO19, WEAK_PULLUP),
 	/* Regulators */
 #define GP_3P7_BYPASS_EN	IMX_GPIO_NR(2, 18)
@@ -136,6 +140,14 @@ static const iomux_v3_cfg_t init_pads[] = {
 	IOMUX_PAD_CTRL(NANDF_D3__GPIO2_IO03, WEAK_PULLUP),
 	/* main power on/ use pmic_on_req instead */
 	IOMUX_PAD_CTRL(GPIO_8__GPIO1_IO08, WEAK_PULLUP),
+
+	/* New rev,  not shorted with TAMPER */
+#define GPIRQ_TAMPER		IMX_GPIO_NR(6, 17)
+	IOMUX_PAD_CTRL(SD3_DAT7__GPIO6_IO17, WEAK_PULLUP),
+	/* Old rev, shorted with TAMPER */
+#define GPIRQ_TAMPER_OLD	IMX_GPIO_NR(4, 18)
+	IOMUX_PAD_CTRL(DI0_PIN2__GPIO4_IO18, WEAK_PULLDN),
+
 	/* TP68 */
 	IOMUX_PAD_CTRL(NANDF_D0__GPIO2_IO00, WEAK_PULLUP),
 	/* TP71 */
@@ -144,7 +156,7 @@ static const iomux_v3_cfg_t init_pads[] = {
 	IOMUX_PAD_CTRL(ENET_RXD0__GPIO1_IO27, WEAK_PULLUP),
 	/* TP74 */
 #define GP_TP74			IMX_GPIO_NR(2, 7)
-	IOMUX_PAD_CTRL(NANDF_D7__GPIO2_IO07, WEAK_PULLUP),
+	IOMUX_PAD_CTRL(NANDF_D7__GPIO2_IO07, WEAK_PULLDN),
 	/* TP84 */
 	IOMUX_PAD_CTRL(KEY_ROW2__GPIO4_IO11, WEAK_PULLUP),
 	/* TP85 */
@@ -243,8 +255,6 @@ static const iomux_v3_cfg_t init_pads[] = {
 	/* I2C2 - RTC */
 #define GPIRQ_RTC	IMX_GPIO_NR(1, 4)
 	IOMUX_PAD_CTRL(GPIO_4__GPIO1_IO04, WEAK_PULLUP),
-#define GPIRQ_TAMPER	IMX_GPIO_NR(4, 18)
-	IOMUX_PAD_CTRL(DI0_PIN2__GPIO4_IO18, WEAK_PULLUP),
 
 	/* I2C3 - Touch */
 #define GPIRQ_TOUCH	IMX_GPIO_NR(4, 15)
@@ -293,12 +303,8 @@ static const iomux_v3_cfg_t init_pads[] = {
 	IOMUX_PAD_CTRL(NANDF_CS2__GPIO6_IO15, WEAK_PULLDN),
 
 	/* Rev 1 only, not on rev 0 */
-#define GP_NFC_PWR_EN		IMX_GPIO_NR(4, 21)
+#define GP_USB_NFC_PWR_EN	IMX_GPIO_NR(4, 21)
 	IOMUX_PAD_CTRL(DISP0_DAT0__GPIO4_IO21, WEAK_PULLDN),
-
-	/* UART1 */
-	IOMUX_PAD_CTRL(SD3_DAT7__UART1_TX_DATA, UART_PAD_CTRL),
-	IOMUX_PAD_CTRL(SD3_DAT6__UART1_RX_DATA, UART_PAD_CTRL),
 
 	/* UART2 */
 #ifndef CONFIG_SILENT_UART
@@ -379,8 +385,10 @@ static const struct i2c_pads_info i2c_pads[] = {
 int board_ehci_hcd_init(int port)
 {
 	if (port) {
+		gpio_set_value(GP_USB_NFC_PWR_EN, 1);
+
 		/* Reset USB hub */
-		gpio_direction_output(GP_USBH1_HUB_RESET, 0);
+		gpio_set_value(GP_USBH1_HUB_RESET, 0);
 		mdelay(2);
 		gpio_set_value(GP_USBH1_HUB_RESET, 1);
 	}
@@ -427,6 +435,13 @@ static const unsigned short gpios_out_low[] = {
 	GP_MIPI_DSI_RESET,
 	GP_MODEM_RESET,
 	GP_MODEM_ON_OFF,
+#ifdef CONFIG_REV_OLD
+	/* Polarity has changed between revs */
+	GP_STAT_LED1,
+#else
+	GP_STAT_LED2,
+	GP_STAT_LED3,
+#endif
 	GP_OV5640_MIPI_RESET,
 	GP_PWM1,
 	GP_MIPI_BACKLIGHT_EN,
@@ -434,7 +449,7 @@ static const unsigned short gpios_out_low[] = {
 	GP_REG_USBOTG,
 	GP_REG_WLAN_EN,
 	GP_USBH1_HUB_RESET,
-	GP_NFC_PWR_EN,
+	GP_USB_NFC_PWR_EN,
 	GP_REG_2P8V_EN,
 	GP_VIBRATOR_EN,
 	GP_TORCH_EN,
@@ -443,6 +458,14 @@ static const unsigned short gpios_out_low[] = {
 static const unsigned short gpios_out_high[] = {
 	GP_ECSPI1_NOR_CS,
 	GP_ECSPI2_CS,
+#ifndef CONFIG_REV_OLD
+	GP_STAT_LED1,
+#else
+	GP_STAT_LED2,
+	GP_STAT_LED3,
+#endif
+	GP_STAT_LED2_CTRL,
+	GP_STAT_LED3_CTRL,
 	GP_OV5640_MIPI_POWER_DOWN,
 };
 
@@ -462,6 +485,7 @@ static const unsigned short gpios_in[] = {
 	GPIRQ_MPU9250_INT,
 	GPIRQ_RTC,
 	GPIRQ_TAMPER,
+	GPIRQ_TAMPER_OLD,
 	GPIRQ_TOUCH,
 	GPIRQ_WIFI,
 	GP_TP74,
@@ -492,7 +516,12 @@ int board_init(void)
 }
 
 const struct button_key board_buttons[] = {
-	{"tp74",	GP_TP74,	't', 1},
+#ifdef CONFIG_REV_OLD
+	{"tamper",	TAMPER_CHECK,	't', 1, 1},
+#else
+	{"tamper",	GPIRQ_TAMPER,	't', 1, 1},
+#endif
+	{"tp74",	GP_TP74,	'4', 0},
 	{NULL, 0, 0, 0},
 };
 

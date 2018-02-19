@@ -298,6 +298,9 @@ config TARGET_A
 config TARGET_ACL
 	bool "acl"
 
+config TARGET_AP
+	bool "ap"
+
 config TARGET_ASH
 	bool "ash"
 
@@ -316,11 +319,17 @@ config TARGET_CAD
 config TARGET_CID
 	bool "cid"
 
+config TARGET_CID_TAB
+	bool "cid_tab"
+
 config TARGET_CNT
 	bool "cnt"
 
 config TARGET_COB
 	bool "cob"
+
+config TARGET_COB2
+	bool "cob2"
 
 config TARGET_DASH
 	bool "dash"
@@ -540,14 +549,17 @@ source "board/barco/platinum/Kconfig"
 source "board/barco/titanium/Kconfig"
 source "board/boundary/a/Kconfig"
 source "board/boundary/acl/Kconfig"
+source "board/boundary/ap/Kconfig"
 source "board/boundary/ash/Kconfig"
 source "board/boundary/ash2/Kconfig"
 source "board/boundary/bt/Kconfig"
 source "board/boundary/bt2/Kconfig"
 source "board/boundary/cad/Kconfig"
 source "board/boundary/cid/Kconfig"
+source "board/boundary/cid_tab/Kconfig"
 source "board/boundary/cnt/Kconfig"
 source "board/boundary/cob/Kconfig"
+source "board/boundary/cob2/Kconfig"
 source "board/boundary/dash/Kconfig"
 source "board/boundary/eo/Kconfig"
 source "board/boundary/h/Kconfig"

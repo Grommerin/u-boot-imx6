@@ -28,6 +28,8 @@ struct display_info_t {
 #define FBF_JEIDA	2
 #define FBF_SPLITMODE	4
 #define FBF_SPI		8
+#define FBF_BKLIT_LOW_ACTIVE	0x10
+#define FBF_BKLIT_DTB		0x20
 	int	fbflags;
 	struct	fb_videomode mode;
 };
@@ -71,6 +73,7 @@ void fbp_setup_display(const struct display_info_t *displays, int cnt);
 #define VD_AUO_B101EW05(_mode, _detect, _bus, _addr)	VDF_AUO_B101EW05(_mode, "auo_b101ew05", RGB666, 0, _detect, _bus, _addr)
 #define VD_HANNSTAR7(_mode, _detect, _bus, _addr)	VDF_HANNSTAR7(_mode, "hannstar7", RGB666, 0, _detect, _bus, _addr)
 #define VD_LG1280_800(_mode, _detect, _bus, _addr)	VDF_HANNSTAR7(_mode, "lg1280x800", RGB666, 0, _detect, _bus, _addr)
+#define VD_M101NWWB(_mode, _detect, _bus, _addr)	VDF_HANNSTAR7(_mode, "M101NWWB", RGB24, 0, _detect, _bus, _addr)
 #define VD_LD101WX1(_mode, _detect, _bus, _addr)	VDF_HANNSTAR7(_mode, "ld101wx1", RGB24, 0, _detect, _bus, _addr)
 #define VD_DT070BTFT(_mode, _detect, _bus, _addr)	VDF_DT070BTFT(_mode, "dt070btft", RGB24, FBF_JEIDA, _detect, _bus, _addr)
 #define VD_WSVGA(_mode, _detect, _bus, _addr)		VDF_WSVGA(_mode, "wsvga", RGB666, 0, _detect, _bus, _addr)
@@ -88,7 +91,11 @@ void fbp_setup_display(const struct display_info_t *displays, int cnt);
 #define VD_LD070WSVGA(_mode, _detect, _bus, _addr)	VDF_LD070WSVGA(_mode, "ld070wsvga", RGB24, 0, _detect, _bus, _addr)
 #define VD_SVGA(_mode, _detect, _bus, _addr)		VDF_SVGA(_mode, "svga", RGB666, FBF_MODESTR, _detect, _bus, _addr)
 #define VD_WVGA_TX23D200_24(_mode, _detect, _bus, _addr) VDF_WVGA_TX23D200(_mode, "tx23d200_24", RGB24, 0, _detect, _bus, _addr)
+#define VD_WVGA_TX23D200_24H(_mode, _detect, _bus, _addr) VDF_WVGA_TX23D200(_mode, "tx23d200_24h", RGB24, FBF_BKLIT_DTB, _detect, _bus, _addr)
+#define VD_WVGA_TX23D200_24L(_mode, _detect, _bus, _addr) VDF_WVGA_TX23D200(_mode, "tx23d200_24l", RGB24, FBF_BKLIT_DTB | FBF_BKLIT_LOW_ACTIVE, _detect, _bus, _addr)
 #define VD_WVGA_TX23D200_18(_mode, _detect, _bus, _addr) VDF_WVGA_TX23D200(_mode, "tx23d200_18", RGB666, 0, _detect, _bus, _addr)
+#define VD_WVGA_TX23D200_18H(_mode, _detect, _bus, _addr) VDF_WVGA_TX23D200(_mode, "tx23d200_18h", RGB666, FBF_BKLIT_DTB, _detect, _bus, _addr)
+#define VD_WVGA_TX23D200_18L(_mode, _detect, _bus, _addr) VDF_WVGA_TX23D200(_mode, "tx23d200_18l", RGB666, FBF_BKLIT_DTB | FBF_BKLIT_LOW_ACTIVE, _detect, _bus, _addr)
 #define VD_WVGA(_mode, _detect, _bus, _addr)		VDF_WVGA(_mode, "wvga", RGB666, 0, _detect, _bus, _addr)
 #define VD_WVGA_J(_mode, _detect, _bus, _addr)		VDF_WVGA(_mode, "wvga_j", RGB24, FBF_JEIDA, _detect, _bus, _addr)
 #define VD_AA065VE11(_mode, _detect, _bus, _addr)	VDF_AA065VE11(_mode, "AA065VE11", RGB24, 0, _detect, _bus, _addr)
