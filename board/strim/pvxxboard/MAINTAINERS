@@ -1,0 +1,6 @@
+PVXXBOARD BOARD
+M:	NIKITA DIVAKOV <n.divakov@strim-tech.com>
+S:	Maintained
+F:	board/strim/pvxxboard/
+F:	include/configs/pvxxboard.h
+F:	configs/pvxxboard_defconfig

@@ -1,0 +1,12 @@
+if TARGET_STRIMPVXXBOARD
+
+config SYS_BOARD
+	default "pvxxboard"
+
+config SYS_VENDOR
+	default "strim"
+
+config SYS_CONFIG_NAME
+	default "pvxxboard"
+
+endif
