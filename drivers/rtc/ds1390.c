@@ -204,6 +204,8 @@ void rtc_reset (void)
 
 	if (spi_claim_bus(slave)) { return; }
 
+	puts("Reset external RTC DS1390\n");
+
 	/* clear the control register */
 	rtc_write(RTC_CONTROL, 0x00);	/* 1st step: reset WP */
 	rtc_write(RTC_CONTROL, 0x00);	/* 2nd step: reset 1Hz, AIE1, AIE0 */
@@ -221,6 +223,7 @@ void rtc_reset (void)
 int rtc_run (void)
 {
     unsigned char control;
+    unsigned char charger;
 
     if (!slave) {
         slave = spi_setup_slave(CONFIG_SYS_SPI_RTC_BUS, CONFIG_SYS_SPI_RTC_DEVID,
@@ -228,17 +231,24 @@ int rtc_run (void)
         if (!slave) { return (-1); }
     }
 
+    if (spi_claim_bus(slave)) { return (-1); }
+
     puts("Run external RTC DS1390\n");
 
-    if (spi_claim_bus(slave)) { return (-1); }
+    /* clear the control register */
+    rtc_write(RTC_CONTROL, 0x00);   /* 1st step: reset WP */
+    rtc_write(RTC_CONTROL, 0x00);   /* 2nd step: reset 1Hz, AIE1, AIE0 */
 
     control = rtc_read(RTC_CONTROL);
     /* set EOSC in control register */
-    rtc_write(RTC_CONTROL, (control & ~RTC_CONTROL_EOSC_BIT));
+    rtc_write(RTC_CONTROL, RTC_CONTROL_RS1_BIT | RTC_CONTROL_RS2_BIT);
+//    rtc_write(RTC_CONTROL, (control & ~RTC_CONTROL_EOSC_BIT));
 
+    charger = rtc_read(RTC_TRCHARGER);
     /* set Vbackup charge mode: charge ON, No diode, 250 Ohm (~13mA) */
     rtc_write(RTC_TRCHARGER, (RTC_TRCHARGER_ENABLE | RTC_TRCHARGER_DS0_BIT  | RTC_TRCHARGER_ROUT0_BIT));
-
+    charger = rtc_read(RTC_TRCHARGER);
+    printf("DS1390: RTC_TRCHARGER 0x%x\n", charger);
     spi_release_bus(slave);
 
     return (0);
