@@ -1,7 +1,7 @@
 #
-# Copyright (C) 2007, Guennadi Liakhovetski <lg@denx.de>
+# Copyright (C) 2018, Nikita Divakov <n.divakov@strim-tech.com>
 #
-# (C) Copyright 2011 Freescale Semiconductor, Inc.
+# (C) Copyright 2018 LLC Strim.
 #
 # SPDX-License-Identifier:	GPL-2.0+
 #

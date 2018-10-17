@@ -123,10 +123,15 @@ config TARGET_EMBESTMX6BOARDS
 	bool "embestmx6boards"
 	select BOARD_LATE_INIT
 
+config TARGET_STRIMBARS3000
+	bool "Strim Bars3000 board"
+	select BOARD_LATE_INIT
+	select MX6Q
+
 config TARGET_STRIMPVXXBOARD
-    bool "Strim PVxx board"
-    select BOARD_LATE_INIT
-    select MX6Q
+	bool "Strim PVxx board"
+	select BOARD_LATE_INIT
+	select MX6Q
 
 config TARGET_GE_B450V3
 	bool "General Electric B450v3"
@@ -624,6 +629,8 @@ source "board/phytec/pcm058/Kconfig"
 source "board/gateworks/gw_ventana/Kconfig"
 source "board/kosagi/novena/Kconfig"
 source "board/samtec/vining_2000/Kconfig"
+source "board/strim/bars3000/Kconfig"
+source "board/strim/pvxxboard/Kconfig"
 source "board/liebherr/mccmon6/Kconfig"
 source "board/logicpd/imx6/Kconfig"
 source "board/seco/Kconfig"
