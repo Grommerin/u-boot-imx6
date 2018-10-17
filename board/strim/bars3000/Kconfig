@@ -1,0 +1,24 @@
+if TARGET_STRIMBARS3000
+
+config SYS_BOARD
+	default "bars3000"
+
+config SYS_VENDOR
+	default "strim"
+
+config SYS_CONFIG_NAME
+	default "bars3000"
+
+config LEDS_COUNT
+    hex "Leds count"
+    default 5
+
+config LEDS_PULSE_US
+    hex "Leds pulse time"
+    default 60000
+
+config LEDS_DELAY_MS
+    hex "Leds delay time"
+    default 500
+
+endif

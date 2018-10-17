@@ -1,0 +1,6 @@
+BARS3000 BOARD
+M:	NIKITA DIVAKOV <n.divakov@strim-tech.com>
+S:	Maintained
+F:	board/strim/bars3000/
+F:	include/configs/bars3000.h
+F:	configs/bars3000_defconfig
