@@ -416,7 +416,7 @@ esdhc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data *data)
 	}
 
 	if (irqstat & IRQSTAT_CTOE) {
-		printf("timeout irqstat=%x\n", irqstat);
+		debug("timeout irqstat=%x\n", irqstat);
 		err = -ETIMEDOUT;
 		goto out;
 	}

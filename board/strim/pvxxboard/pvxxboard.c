@@ -206,8 +206,6 @@ static void setup_spi(void)
     gpio_direction_output(IMX_GPIO_NR(2, 30), 1);
     gpio_direction_output(IMX_GPIO_NR(4, 10), 1);
 	imx_iomux_v3_setup_multiple_pads(ecspi1_pads, ARRAY_SIZE(ecspi1_pads));
-
-
 }
 #endif
 
@@ -330,7 +328,6 @@ int board_early_init_f(void)
 	gpio_direction_output(IMX_GPIO_NR(6, 15) , 1);
 	/* set backlight level to off */
 	gpio_direction_output(IMX_GPIO_NR(2, 10) , 0);
-	setup_display();
 #endif
 
 	return (0);
@@ -340,6 +337,10 @@ int board_init(void)
 {
 	/* address of boot parameters */
 	gd->bd->bi_boot_params = PHYS_SDRAM + 0x100;
+
+#if defined(CONFIG_VIDEO_IPUV3)
+    setup_display();
+#endif
 
 #ifdef CONFIG_MXC_SPI
 	setup_spi();
@@ -363,6 +364,7 @@ int board_late_init(void)
 #ifdef CONFIG_CMD_BMODE
 	add_board_boot_modes(strimpvxx_boot_modes);
 #endif
+
 
 	return (0);
 }
