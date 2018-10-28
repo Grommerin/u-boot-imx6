@@ -32,14 +32,15 @@
 #define CONFIG_ARP_TIMEOUT              200UL
 
 #define CONFIG_MXC_SPI
-#define CONFIG_CMD_SF
+#define CONFIG_CMD_SPI
 #define CONFIG_CMD_DATE
 #ifdef  CONFIG_CMD_DATE
 #define CONFIG_RTC_DS1390
 
+#define CONFIG_DEFAULT_SPI_MODE     SPI_MODE_3
 #define CONFIG_SYS_SPI_RTC_BUS      0
 #define CONFIG_SYS_SPI_RTC_DEVID    1
-#define CONFIG_SYS_SPI_RTC_SPEED    1000000
+#define CONFIG_SYS_SPI_RTC_SPEED    4000000
 #endif
 
 /* Print Buffer Size */

@@ -223,7 +223,6 @@ void rtc_reset (void)
 int rtc_run (void)
 {
     unsigned char control;
-    unsigned char charger;
 
     if (!slave) {
         slave = spi_setup_slave(CONFIG_SYS_SPI_RTC_BUS, CONFIG_SYS_SPI_RTC_DEVID,
@@ -241,14 +240,11 @@ int rtc_run (void)
 
     control = rtc_read(RTC_CONTROL);
     /* set EOSC in control register */
-    rtc_write(RTC_CONTROL, RTC_CONTROL_RS1_BIT | RTC_CONTROL_RS2_BIT);
-//    rtc_write(RTC_CONTROL, (control & ~RTC_CONTROL_EOSC_BIT));
+    rtc_write(RTC_CONTROL, (control & ~RTC_CONTROL_EOSC_BIT));
 
-    charger = rtc_read(RTC_TRCHARGER);
     /* set Vbackup charge mode: charge ON, No diode, 250 Ohm (~13mA) */
     rtc_write(RTC_TRCHARGER, (RTC_TRCHARGER_ENABLE | RTC_TRCHARGER_DS0_BIT  | RTC_TRCHARGER_ROUT0_BIT));
-    charger = rtc_read(RTC_TRCHARGER);
-    printf("DS1390: RTC_TRCHARGER 0x%x\n", charger);
+
     spi_release_bus(slave);
 
     return (0);
@@ -268,13 +264,14 @@ static unsigned char rtc_read (unsigned char reg)
 
 static void rtc_write (unsigned char reg, unsigned char val)
 {
+    int ret = 0;
 	unsigned char dout[2];	/* SPI Output Data Bytes */
 	unsigned char din[2];	/* SPI Input Data Bytes */
 
 	dout[0] = 0x80 | reg;
 	dout[1] = val;
 
-	spi_xfer (slave, 16, dout, din, SPI_XFER_BEGIN | SPI_XFER_END);
+	ret = spi_xfer (slave, 16, dout, din, SPI_XFER_BEGIN | SPI_XFER_END);
 }
 
 #endif /* end of code exclusion (see #ifdef CONFIG_SXNI855T above) */

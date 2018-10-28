@@ -197,14 +197,14 @@ iomux_v3_cfg_t const ecspi1_pads[] = {
 int board_spi_cs_gpio(unsigned bus, unsigned cs)
 {
     if ((bus != 0) || (cs > 1)) { return (-1); }
-    return ((cs == 0) ? IMX_GPIO_NR(4, 10) :
-           ((cs == 1) ? IMX_GPIO_NR(2, 30) : -1));
+    return ((cs == 0) ? IMX_GPIO_NR(2, 30) :
+           ((cs == 1) ? IMX_GPIO_NR(4, 10) : -1));
 }
 
 static void setup_spi(void)
 {
-    gpio_direction_output(IMX_GPIO_NR(4, 10), 1);
     gpio_direction_output(IMX_GPIO_NR(2, 30), 1);
+    gpio_direction_output(IMX_GPIO_NR(4, 10), 1);
 	imx_iomux_v3_setup_multiple_pads(ecspi1_pads, ARRAY_SIZE(ecspi1_pads));
 
 
@@ -343,7 +343,6 @@ int board_init(void)
 
 #ifdef CONFIG_MXC_SPI
 	setup_spi();
-	rtc_run();
 #endif
 	return (0);
 }
@@ -359,6 +358,8 @@ static const struct boot_mode strimpvxx_boot_modes[] = {
 
 int board_late_init(void)
 {
+    rtc_run();
+
 #ifdef CONFIG_CMD_BMODE
 	add_board_boot_modes(strimpvxx_boot_modes);
 #endif
